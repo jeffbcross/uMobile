@@ -21,7 +21,7 @@ var PortletWindowController = function (facade) {
     var win, _self = this, app = facade, 
         Device, WindowManager, PortalWindow, Styles, UI, LocalDictionary, Login, UPM, Session,
         activityIndicator, titleBar, navBar, navBackButton, webView,
-        initialized, winListeners = [], activePortlet, _homeURL,
+        initialized, winListeners = [], activePortlet, _homeURL, _lastVideoOpened = '',
         pathToRoot = '../../',
         init, drawWindow, getQualifiedURL, getLocalUrl,
         includePortlet, onPortletLoad, onPortletBeforeLoad, onWindowOpen, onAppResume, onBackBtnPress;
@@ -79,13 +79,6 @@ var PortletWindowController = function (facade) {
         });
         win.open();
 
-        if (Device.isIOS() || !webView) {
-            webView = Titanium.UI.createWebView(Styles.portletView);
-            webView.addEventListener('load', onPortletLoad);
-            webView.addEventListener('beforeload', onPortletBeforeLoad);
-            webView.hide();
-        }
-        
         titleBar = UI.createTitleBar({
             title: portlet.title,
             settingsButton: false,
@@ -105,6 +98,22 @@ var PortletWindowController = function (facade) {
 
         win.add(titleBar);
         win.add(navBar);
+        if (Device.isIOS() || !webView) {
+            Ti.API.debug("The device is iOS or there isn't a webView yet");
+            webView = Titanium.UI.createWebView(Styles.portletView);
+            webView.addEventListener('load', onPortletLoad);
+            webView.addEventListener('beforeload', onPortletBeforeLoad);
+            webView.hide();
+        }
+        else {
+            Ti.API.debug("It's Android and there's already a webview");
+            try {
+                win.remove(webView);
+            }
+            catch (e) {
+                Ti.API.error("Couldn't remove webview: " + JSON.stringify(e));
+            }
+        }
         win.add(webView);
         win.add(activityIndicator);
         
@@ -203,33 +212,10 @@ var PortletWindowController = function (facade) {
             webView.stopLoading();
             webView.url = getQualifiedURL(webView.url);
         }
-        activityIndicator.setLoadingMessage(LocalDictionary.loading);
-        activityIndicator.show();
-    };
-    
-    onBackBtnPress = function (e) {
-        webView.goBack();
-    };
-    
-    onPortletLoad = function (e) {
-        webView.show();
-        
-        activityIndicator.hide();
-        var portalIndex = e.url.indexOf(UPM.BASE_PORTAL_URL);
-        Ti.API.debug("onPortletLoad() in PortletWindowController, index: " + portalIndex);
-        if (portalIndex >= 0) {
-            Ti.API.debug("Visiting a portal link");
-            Ti.App.fireEvent('SessionActivity', {context: LoginProxy.sessionTimeContexts.WEBVIEW});
-            webView.externalModule = false;
-            navBar.visible = false;
-            webView.top = titleBar.height;
-            webView.height = win.height - titleBar.height;
-            // webView.setTop(Styles.titleBar.height);
-            // Login.updateSessionTimeout(Login.sessionTimeContexts.WEBVIEW);
-        }
         else if (e.url.indexOf('http://m.youtube.com') === 0 && Device.isAndroid()) {
         	var _URLToOpen = e.url, _params = e.url.split('?')[1].split('&');
-        	Ti.API.info(JSON.stringify(_params));
+        	webView.stopLoading();
+
         	for (var i=0, iLength = _params.length; i<iLength; i++) {
         		Ti.API.info("iterating through url params");
         		if (_params[i].indexOf('desktop_uri') > -1) {
@@ -240,9 +226,40 @@ var PortletWindowController = function (facade) {
         		}
         	}
         	Ti.API.info("Opening: " + _URLToOpen);
-        	Ti.API.info("Does decodeURI() work?" + decodeURIComponent('http%3A%2F%2F'));
-        	Ti.API.info("Does encodeURIComponent() work? " + encodeURIComponent('http://www.google.com'));
-            Ti.Platform.openURL(_URLToOpen);
+        	if (_URLToOpen !== _lastVideoOpened) {
+        	    webView.stopLoading();
+                Ti.Platform.openURL(_URLToOpen);
+                //Set the last video to this, so that it doesn't try to broadcast the intent twice.
+                _lastVideoOpened = _URLToOpen;
+        	}
+        }
+        activityIndicator.setLoadingMessage(LocalDictionary.loading);
+        activityIndicator.show();
+    };
+    
+    onBackBtnPress = function (e) {
+        webView.goBack();
+    };
+    
+    onPortletLoad = function (e) {
+        var portalIndex = e.url.indexOf(UPM.BASE_PORTAL_URL);
+        Ti.API.debug("onPortletLoad() in PortletWindowController, index: " + portalIndex);
+        webView.show();
+        
+        activityIndicator.hide();
+        
+        
+        if (portalIndex >= 0) {
+            Ti.API.debug("Visiting a portal link");
+            Ti.App.fireEvent('SessionActivity', {context: LoginProxy.sessionTimeContexts.WEBVIEW});
+            //We want to be able to open any video now, so we'll clear the YouTube workaround variable
+            _lastVideoOpened = '';
+            webView.externalModule = false;
+            navBar.visible = false;
+            webView.top = titleBar.height;
+            webView.height = win.height - titleBar.height;
+            // webView.setTop(Styles.titleBar.height);
+            // Login.updateSessionTimeout(Login.sessionTimeContexts.WEBVIEW);
         }
         else {
             Ti.API.debug("Visiting an external link. Webview.url = " + webView.url + " & e.url = " + e.url);
