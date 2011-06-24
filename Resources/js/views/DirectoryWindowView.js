@@ -51,7 +51,7 @@ var DirectoryWindowView = function (facade) {
         blurSearch();
         if (searchBar) { searchBar.input.value = ''; }
         DirectoryDetail.hide();
-        if (peopleListTable) { peopleListTable.setData(defaultTableData); }
+        if (peopleListTable) { peopleListTable.setData(_viewModel.emergencyContacts || defaultTableData); }
         if (activityIndicator) { activityIndicator.hide(); }
     };
     
