@@ -88,7 +88,8 @@ var PortletWindowController = function (facade) {
         // initialize navigation bar for URLs outside the portal
         navBar = UI.createSecondaryNavBar({
             backButton: true,
-            backButtonHandler: onBackBtnPress
+            backButtonHandler: onBackBtnPress,
+            btnFloatLeft: true
         });
         navBar.top = 40;
         navBar.visible = false;

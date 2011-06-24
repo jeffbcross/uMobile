@@ -201,8 +201,9 @@ var Styles = function (facade) {
         	width: OS === 'android' ? 'auto' : Titanium.Platform.displayCaps.platformWidth
         },
         secondaryNavBarLabel: {
-            width: Ti.Platform.displayCaps.platformWidth - 80,
+            width: Ti.Platform.displayCaps.platformWidth - 50 - 10 * 3,
             left: 10,
+            buttonLeftFloat: 50 + 10 * 2,
             height: defaults.TITLEBAR_HEIGHT,
             color: defaults.SECONDARY_BAR_COLOR,
             textAlign: "left",
@@ -224,6 +225,7 @@ var Styles = function (facade) {
         secondaryNavBarButton: {
             style: Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
             left: Ti.Platform.displayCaps.platformWidth - 50 - 10,
+            leftFloat: 10,
             width: 50,
             height: 30,
         	backgroundImage: 'img/secondarybarbtnbg.png',
