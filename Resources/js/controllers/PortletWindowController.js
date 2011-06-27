@@ -162,10 +162,12 @@ var PortletWindowController = function (facade) {
         //We only need to check the session if it's a link to the portal.
         isValidSession = Login.isValidWebViewSession();
         if (!isValidSession) {
+            Ti.API.debug("!isValidSession in getLocalUrl()");
             Login.getLoginURL(url);
             localUrl = Login.getLoginURL(url);
         }
         else {
+            Ti.API.debug("isValidSession in getLocalUrl()");
             if (url.indexOf('/') === 0) {
                 Ti.API.info("Index of / in URL is 0");
                 var newUrl = UPM.BASE_PORTAL_URL + url;
@@ -181,20 +183,22 @@ var PortletWindowController = function (facade) {
     };
     
     getQualifiedURL = function (url) {
+        Ti.API.debug("getQualifiedURL() in PortletWindowController");
         var _url;
         if (url.indexOf('/') == 0) {
             Ti.API.debug("Portlet URL is local");
-            if (Session.validateSessions()[LoginProxy.sessionTimeContexts.WEBVIEW].isActive) {
+            if (Session.validateSessions()[LoginProxy.sessionTimeContexts.WEBVIEW]) {
+                Ti.API.debug("Session is active in getQualifiedURL()");
                 _url = getLocalUrl(url);
             }
             else {
+                Ti.API.debug("Session is NOT active in getQualifiedURL(): " + JSON.stringify(Session.validateSessions()));
                 _url = Login.getLoginURL(url);
             }
             webView.externalModule = false;
             webView.top = titleBar.height;
         } else {
-            Ti.API.debug("Portlet URL is external");
-            // webView.getExternalUrl(portlet.url);
+            Ti.API.debug("Portlet URL is external in getQualifiedURL()");
             _url = url;
             webView.externalModule = true;
         }
