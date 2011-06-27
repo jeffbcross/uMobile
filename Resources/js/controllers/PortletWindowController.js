@@ -37,6 +37,9 @@ var PortletWindowController = function (facade) {
     
     this.close = function (options) {
         Ti.API.info("close() in PortletWindowController");
+        if (webView && Device && Device.isAndroid()) {
+            webView.url = Titanium.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'html/blank.html').nativePath;
+        }
         if (win) {
             win.close();
         }
@@ -115,6 +118,7 @@ var PortletWindowController = function (facade) {
                 Ti.API.error("Couldn't remove webview: " + JSON.stringify(e));
             }
         }
+        webView.visible = false;
         win.add(webView);
         win.add(activityIndicator);
         
