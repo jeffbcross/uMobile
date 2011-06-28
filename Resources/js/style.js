@@ -174,7 +174,7 @@ var Styles = function (facade) {
         },
         //Titanium.UI.View with home icon implemented in GenericTitleBar on left-hand side
         titleBarHomeButton: {
-            image: Resources.getResourcePath("icons/tab-home.png"),
+            image: "icons/tab-home.png",
             width: 18,
             height: 18
         },
@@ -190,7 +190,7 @@ var Styles = function (facade) {
         titleBarSettingsButton: {
     	    height: 18,
     	    width: 18,
-    	    image: Resources.getResourcePath("icons/tab-settings.png")
+    	    image: "icons/tab-settings.png"
     	},
     	secondaryNavBar: {
             top: 0,
@@ -308,7 +308,7 @@ var Styles = function (facade) {
             right: 11,
             height: 20,
             width: 20,
-            image: Resources.getResourcePath('icons/badgeBackground.png')
+            image: 'icons/badgeBackground.png'
         },
         gridBadgeNumber: {
             textAlign: "center",
@@ -444,7 +444,7 @@ var Styles = function (facade) {
     	    height: Ti.Platform.displayCaps.platformHeight - defaults.TITLEBAR_HEIGHT,
     	    color: '#fff',
     	    zIndex: 1000,
-    	    backgroundImage: Resources.getResourcePath('img/bgActivityIndicator.png')
+    	    backgroundImage: 'img/bgActivityIndicator.png'
     	},
     	activityIndicatorDialog: {
     	    width: Math.round(Ti.Platform.displayCaps.platformWidth * 0.75),
@@ -452,7 +452,7 @@ var Styles = function (facade) {
     	    borderRadius: 10,
     	    borderWidth: 1,
     	    borderColor: "#fff",
-    	    backgroundImage: Resources.getResourcePath('img/bgActivityIndicatorDialog.png')
+    	    backgroundImage: 'img/bgActivityIndicatorDialog.png'
     	},
     	activityIndicatorMessage: {
     	    textAlign: 'center',
