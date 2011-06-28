@@ -3,12 +3,12 @@
 **/
 
 var ResourceProxy = function (facade) {
-    var _self = this, app = facade, init, Config,
+    var _self = this, app = facade, init, Config, Device,
     resolutionMatrix;
     
     init = function () {
         Config = app.config;
-        resolutionMatrix = ResourceProxy.resolutionMatrix;
+        Device = app.models.deviceProxy;
     };
     
     this.getResourcePath = function (file) {
@@ -26,6 +26,25 @@ var ResourceProxy = function (facade) {
     };
     
     this.getPortletIcon = function (fname) {
+        if (!Config.nativeIcons[fname]) {
+            Ti.API.error("Couldn't find icon for " + fname);
+            return false;
+        }
+        else if (Device.isIPad()) {
+            return 'iphone/icons/' + Config.nativeIcons[fname].replace('.png', '_72.png');
+        }
+        else if (Device.isIPhone()){
+            return 'iphone/icons/' + Config.nativeIcons[fname];
+        }
+        else if (Device.isAndroid()) {
+            Ti.API.debug("Device.isAndroid() in getPortletIcon." + fname);
+                return '/images/' + Config.nativeIcons[fname];
+        }
+        else {
+            Ti.API.error("This device type could not be determined in getPortletIcon() in ResourceProxy");
+            return '/images/default.png';
+        }
+        /*
         var resolution, density;
         
         //Every icon should have these sizes: 114 (iOS retina), 72 (iPad and Android hi-res), 57 (iOS medium), 48 (Android medium), 36 (Android low)
@@ -38,11 +57,11 @@ var ResourceProxy = function (facade) {
         else {
             Ti.API.error("Can't find icon for " + fname);
             return false;
-        }
+        }*/
     };
     init();
 };
-ResourceProxy.resolutionMatrix = {
+/*ResourceProxy.resolutionMatrix = {
     android: {
         high: 72,
         medium: 57,
@@ -55,4 +74,4 @@ ResourceProxy.resolutionMatrix = {
         medium: 57,
         high: 114
     }
-};
+};*/

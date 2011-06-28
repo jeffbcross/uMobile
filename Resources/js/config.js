@@ -76,7 +76,6 @@ var ConfigModule = function (app) {
     this.LOCAL_MODULES = [];
     this.LOCAL_MODULES.map = {
         title: 'map',
-        iconUrl: 'icons/map.png',
         fname: 'map',
         window: 'map'
     };
@@ -84,7 +83,6 @@ var ConfigModule = function (app) {
     this.LOCAL_MODULES.directory = {
         title: 'directory',
         fname: 'directory',
-        iconUrl: 'icons/directory.png',
         doesRequireLayout: true,
         window: 'directory'
     };
@@ -113,16 +111,16 @@ var ConfigModule = function (app) {
     };
     
     this.nativeIcons = {
-        videos: 'icons/youtube.png',
-        news: 'icons/feed.png',
-        calendar: 'icons/calendar.png',
-        map: 'icons/map.png',
-        directory: 'icons/directory.png',
-        twitter: 'icons/twitter.png',
-        transit: 'icons/transit.png',
-        weather: 'icons/weather.png',
-        stats: 'icons/stats.png',
-        presentations: 'icons/opencast.png'
+        videos: 'youtube.png',
+        news: 'feed.png',
+        calendar: 'calendar.png',
+        map: 'map.png',
+        directory: 'directory.png',
+        twitter: 'twitter.png',
+        transit: 'transit.png',
+        weather: 'weather.png',
+        stats: 'stats.png',
+        presentations: 'opencast.png'
     };
 
     this.directoryEmergencyContacts = [
