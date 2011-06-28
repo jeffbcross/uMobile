@@ -86,12 +86,6 @@ var ConfigModule = function (app) {
         doesRequireLayout: true,
         window: 'directory'
     };
-    this.LOCAL_MODULES.transit = {
-        title: 'Transit',
-        fname: 'transit',
-        url: 'http://m.metro.net/',
-        externalModule: true
-    };
     this.LOCAL_MODULES.twitter = {
         title: 'Twitter',
         fname: 'twitter',

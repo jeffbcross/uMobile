@@ -17,10 +17,10 @@ var ResourceProxy = function (facade) {
             return false;
         }
         else if (Device.isIPad()) {
-            return 'iphone/icons/' + Config.nativeIcons[fname].replace('.png', '_72.png');
+            return '/images/' + Config.nativeIcons[fname].replace('.png', '_72.png');
         }
         else if (Device.isIPhone()){
-            return 'iphone/icons/' + Config.nativeIcons[fname];
+            return '/images/' + Config.nativeIcons[fname];
         }
         else if (Device.isAndroid()) {
             Ti.API.debug("Device.isAndroid() in getPortletIcon." + fname);
